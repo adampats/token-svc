@@ -1,18 +1,20 @@
 package main
 
 import (
+  "os"
   "fmt"
   "log"
   "net/http"
   "math/rand"
   "time"
+  "strconv"
 )
 
-var port string = ":8080"
+var port = 8080
 var tokenlen = 40
 var r *rand.Rand
 
-func gimmeToken(w http.ResponseWriter, r *http.Request)  {
+func printToken(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, generateToken(tokenlen))
 }
 
@@ -26,9 +28,17 @@ func generateToken(length int) string {
 }
 
 func main() {
+
+  // assign listening port number to 1st command line argument, if provided
+  args := os.Args[1:]
+  if len(args) != 0 {
+    port, _ = strconv.Atoi(args[0])
+  }
+  portSuffix := fmt.Sprintf(":%v", strconv.Itoa(port))
+
   r = rand.New(rand.NewSource(time.Now().UnixNano()))
-  http.HandleFunc("/", gimmeToken)
-  err := http.ListenAndServe(port, nil)
+  http.HandleFunc("/", printToken)
+  err := http.ListenAndServe(portSuffix, nil)
   if err != nil {
     log.Fatal("ListenAndServe: ", err)
   }
