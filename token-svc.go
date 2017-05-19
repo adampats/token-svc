@@ -28,7 +28,6 @@ func generateToken(length int) string {
 }
 
 func main() {
-
   // assign listening port number to 1st command line argument, if provided
   args := os.Args[1:]
   if len(args) != 0 {
@@ -38,6 +37,7 @@ func main() {
 
   r = rand.New(rand.NewSource(time.Now().UnixNano()))
   http.HandleFunc("/", printToken)
+  fmt.Println("Listening on port " + portSuffix + "...")
   err := http.ListenAndServe(portSuffix, nil)
   if err != nil {
     log.Fatal("ListenAndServe: ", err)
