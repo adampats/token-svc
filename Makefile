@@ -13,4 +13,4 @@ image: $(TARGET)
 	docker build -t $(TARGET) .
 
 run: $(TARGET)
-	docker run -it --rm $(TARGET)
+	docker run -it -p 8080:8080 --rm $(TARGET)
